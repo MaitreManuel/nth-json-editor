@@ -1,0 +1,5 @@
+.editor__entry {
+  display: flex;
+  margin-bottom: .25rem;
+  margin-top: .25rem;
+}

@@ -1,21 +1,15 @@
 import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 
+import App from './components/App.tsx';
+
 import store from './stores/store'
 
-import Editor from './components/Editor.tsx'
+import './styles/atomic.css';
+import './styles/theme.css';
 
-import * as data from '../data/example.json';
-
-import './styles/index.css';
-
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById('nth-json-editor')!).render(
   <Provider store={store}>
-    <header>
-      <h1>JSON Editor</h1>
-    </header>
-    <main role="main">
-      <Editor data={data} />
-    </main>
+    <App />
   </Provider>,
 )

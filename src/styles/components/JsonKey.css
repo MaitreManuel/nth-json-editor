@@ -1,0 +1,13 @@
+.json-key__button {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+}
+
+.json-key__label {
+  cursor: default;
+  margin: 0;
+}
