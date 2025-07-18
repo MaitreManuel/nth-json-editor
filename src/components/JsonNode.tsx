@@ -8,11 +8,12 @@ import '../styles/components/JsonNode.css'
 
 interface JsonNodeProps {
   children: Children,
+  isValueArray?: boolean,
   keyName?: string,
   nbItems?: number,
 }
 
-function JsonNode ({ children, keyName, nbItems }: JsonNodeProps) {
+function JsonNode ({ children, isValueArray, keyName, nbItems }: JsonNodeProps) {
   const keyNameBtn = `${keyName ? keyName : 'root'}-btn`
 
   const [isOpen, setIsOpen] = useState<boolean>(true)
@@ -31,11 +32,14 @@ function JsonNode ({ children, keyName, nbItems }: JsonNodeProps) {
             label={keyName}
             onClick={toggleNode}
           />
-          <p className="json-node__start--symbol theme__emphasized">{'{'}</p>
-          { nbItems > 1
-            ? <p className="json-node__num-items theme__comment">
-              {nbItems} items
-          </p>
+          <p className="json-node__start--symbol theme__emphasized">{isValueArray ? '[' : '{'}</p>
+          { nbItems
+            ? <button
+              className="json-node__num-items theme__comment theme__highlight--bg--hover"
+              onClick={toggleNode}
+            >
+              {nbItems} {isValueArray ? `item${nbItems > 1 ? 's' : ''}` : `entr${nbItems > 1 ? 'ies' : 'y'}`}
+          </button>
             : ''
           }
         </div>
@@ -47,7 +51,7 @@ function JsonNode ({ children, keyName, nbItems }: JsonNodeProps) {
           {children}
         </div>
         <div className="json-node__end">
-          <p className="json-node__end--symbol theme__emphasized">{'}'}</p>
+          <p className="json-node__end--symbol theme__emphasized">{isValueArray ? ']' : '}'}</p>
         </div>
       </div>
     </>

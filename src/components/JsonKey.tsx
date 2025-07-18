@@ -1,13 +1,18 @@
+import type { MouseEventHandler } from 'react';
+
 import '../styles/components/JsonKey.css'
 
 interface JsonKeyProps {
   id?: string,
+  isValueArray?: boolean,
   isOpen?: boolean,
   label?: string,
-  onClick?: Function,
+  onClick?: MouseEventHandler,
 }
 
-function JsonKey ({ id, isOpen, label, onClick }: JsonKeyProps) {
+function JsonKey ({ id, isValueArray, isOpen, label, onClick }: JsonKeyProps) {
+  const transformedLabel = isValueArray ? label : `"${label}"`;
+
   return (
     <>
       <p className="json-key__label theme__emphasized">
@@ -18,9 +23,9 @@ function JsonKey ({ id, isOpen, label, onClick }: JsonKeyProps) {
             type="button"
             onClick={onClick}
           >
-            {isOpen ? <span>&#11206;</span> : <span>&#11208;</span> } {label ? `"${label}"` : ''}
+            {isOpen ? <span>&#11206;</span> : <span>&#11208;</span> } {label ? `${transformedLabel}` : ''}
           </button>
-          : `"${label}"`
+          : <span>{transformedLabel}</span>
         }
       </p>
       <span className="json-key__separator">{label ? ':' : ''}&nbsp;</span>

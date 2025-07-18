@@ -1,3 +1,14 @@
+.json-value__badge {
+  border-radius: .25rem;
+  font-size: .7rem;
+  margin-left: .4rem;
+  padding: .15rem .2rem;
+}
+
+.json-value__input {
+  border: 0;
+}
+
 .json-value__value {
   margin: 0;
 }

@@ -17,40 +17,28 @@
   --solarized-cyan:      #2aa198;
   --solarized-green:     #859900;
 
-  font-family: Consolas, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  font-weight: 400;
+  --base-fonts: system-ui, Avenir, Helvetica, Arial;
 }
 
 body {
+  font-family: var(--base-fonts), sans-serif;
+  font-weight: 400;
   margin: 0;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-
-a:hover {
-  color: #535bf2;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
 }
 
 .theme__solarized .theme__background {
   background-color: var(--solarized-base3);
 }
 
+.theme__solarized .theme__background-alt,
+.theme__solarized .theme__badge,
 .theme__solarized .theme__highlight--bg--hover:hover {
   background-color: var(--solarized-base2);
 }
 
 .theme__solarized .theme__border {
-  --border: var(--solarized-base00);
-  --border-hover: var(--solarized-magenta);
+  --border: var(--solarized-base2);
+  --border-hover: var(--solarized-cyan);
 }
 
 .theme__solarized .theme__comment {
@@ -61,3 +49,19 @@ h1 {
   color: var(--solarized-base01);
 }
 
+.theme__solarized .theme__type-boolean {
+  color: var(--solarized-yellow);
+}
+
+.theme__solarized .theme__type-default {
+  color: var(--solarized-violet);
+  font-weight: bold;
+}
+
+.theme__solarized .theme__type-number {
+  color: var(--solarized-blue);
+}
+
+.theme__solarized .theme__type-string {
+  color: var(--solarized-cyan);
+}
