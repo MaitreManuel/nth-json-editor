@@ -20,6 +20,7 @@ function JsonValue ({ value }: JsonValueProps) {
   const saveEdit = () => {
     setEditMode(false)
     setChangedValue(changedValue)
+    // Change in redux
   }
 
   useEffect(() => {
@@ -55,6 +56,12 @@ function JsonValue ({ value }: JsonValueProps) {
         >
           <span>{ (hasDoubleQuotes ? `"${changedValue}"` : `${changedValue}`) }</span>
           {typeName ? <span className="json-value__badge theme__badge">{typeName}</span> : ''}
+          {value !== changedValue
+            ? <>
+              <span className="json-value__old-value--label">Old value &#8594;</span>
+              <span className="json-value__old-value">"{value}"</span>
+            </>
+            : ''}
         </p>
         : <>
           <input
