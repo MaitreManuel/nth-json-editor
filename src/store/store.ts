@@ -7,6 +7,12 @@ const get = (path: string) => {
   return store[path];
 };
 
+const remove = (path: string) => {
+  _.unset(store, `data.${path}`);
+
+  document.dispatchEvent(new CustomEvent('DOMRefresh'));
+};
+
 const set = (path: string, value: unknown) => {
   console.log(_.get(store, path))
   _.set(store, path, value);
@@ -15,4 +21,4 @@ const set = (path: string, value: unknown) => {
   document.dispatchEvent(new CustomEvent('DOMRefresh'));
 };
 
-export { get, set };
+export { get, remove, set };

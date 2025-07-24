@@ -1,20 +1,14 @@
 import { get, set } from '../store/store.ts';
 
+import { Deletable } from '../utils/Deletable.ts';
+import { Expandable } from '../utils/Expandable.ts';
+
 import type { Component } from '../registries/componentsRegistry.ts';
 
 const handler = (event: Event) => {
   const element = event?.target as HTMLElement | undefined;
 
   switch(true) {
-    case !element || !element.dataset.path:
-      break;
-    case element?.dataset.role === 'collapse' && event.type === 'click':
-      break;
-    case element?.dataset.role === 'expand' && event.type === 'click':
-      break;
-    case element?.dataset.role === 'submit' && event.type === 'click':
-      event.stopPropagation();
-      break;
     case element?.dataset.role === 'edit' && event.type === 'click':
       set('edit', element.dataset.path);
       break;
@@ -39,12 +33,6 @@ const support = (value: unknown) => (
   Array.isArray(value)
   && value.reduce((acc: boolean, current: unknown) => acc ? typeof current === 'string' : acc, true)
 );
-
-const renderCollapsed = () => {
-  return `
-    <p>{ collapsed }</p>
-  `;
-};
 
 const renderEdit = (value: string[], path: string | null = null, key: string) => {
   return `
@@ -118,21 +106,16 @@ const render = (value: string[], parentPath: string | null = null, key: string) 
       case expandedState:
         return renderExpanded;
       default:
-        return renderCollapsed;
+        return Expandable.renderCollapsed;
     }
   };
 
   return `
     <div class="component__node">
-      <button
-        class=""
-        data-role="${expandedState ? 'collapse' : 'expand'}"
-        "${editState ? 'disabled' : '' }"
-      >
-        ${expandedState ? '-' : '+'}
-      </button>
+      ${Expandable.renderButton(path)}
       ${renderLabel(key, path)}
-      ${stateRender()(value, parentPath, key)}
+      ${Deletable.renderButton(path)}
+      ${stateRender()(value, path, key)}
     </div>
   `;
 };

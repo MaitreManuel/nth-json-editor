@@ -1,5 +1,7 @@
 import { ArrayComponent } from '../components/ArrayComponent.ts';
 import { BooleanComponent } from '../components/BooleanComponent.ts';
+import { Deletable } from '../utils/Deletable.ts';
+import { Expandable } from '../utils/Expandable.ts';
 import { NumberComponent } from '../components/NumberComponent.ts';
 import { NullComponent } from '../components/NullComponent.ts';
 import { ObjectComponent } from '../components/ObjectComponent.ts';
@@ -13,6 +15,8 @@ export interface Component {
 }
 
 const registry: Record<string, Component> = {
+  deletable: Deletable,
+  expandable: Expandable,
   stringArray: StringArrayComponent,
   array: ArrayComponent,
   boolean: BooleanComponent,

@@ -1,28 +1,31 @@
+import { Deletable } from '../utils/Deletable.ts';
+import { Expandable } from '../utils/Expandable.ts';
+
 import type { Component } from '../registries/componentsRegistry.ts';
 
-const handler = () => true;
+const handler = () => false;
 
 const support = (value: unknown) => Array.isArray(value);
 
-const renderChildren = (value: unknown, parentPath: string | null = null, _key: string, registry: (value: unknown) => Component) => {
-  return Object.entries(value!).map(([childKey, childValue]: [string, unknown]) => {
-    const component: Component | undefined = registry(childValue);
-
-    return component ? component.render(childValue as unknown, parentPath, childKey, registry) : '';
-  }).join('');
+const renderLabel = (key: string, path: string) => {
+  return `
+    <label class="component__node--key" for="${path}">
+      ${key} :
+    </label>
+  `;
 };
 
 const render = (value: unknown, parentPath: string | null = null, key: string, registry: (value: unknown) => Component) => {
+  const path = `${parentPath ? `${parentPath}.`: ''}${key}`;
+
   return `
-      <div class="component__node">
-        <label class="component__node--key" for="">
-          ${key} :
-        </label>
-        <div class="component__node--value">
-          ${renderChildren(value as Record<string, unknown>, `${parentPath ? `${parentPath}.`: ''}${key}`, '', registry)}
-        </div>
-      </div>
-    `;
+    <div class="component__node">
+      ${Expandable.renderButton(path)}
+      ${renderLabel(key, path)}
+      ${Deletable.renderButton(path)}
+      ${(Expandable.isExpanded(path) ? Expandable.renderExpanded : Expandable.renderCollapsed)(value, path, key, registry)}
+    </div>
+  `;
 };
 
 export const ArrayComponent: Component = {
