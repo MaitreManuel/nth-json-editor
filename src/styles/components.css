@@ -1,0 +1,22 @@
+.component__node {
+}
+
+.component__node .component-view__entry {
+  display: flex;
+}
+
+.component__node .component-view__entry .component-view__key,
+.component__node .component__node--key {
+  color: var(--color-text);
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.component__node .component-view__entry .component-view__value {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.component__node .component__node--value {
+  padding-left: 10px;
+}

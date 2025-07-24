@@ -1,29 +1,82 @@
-export const NumberComponent = {
-  editMode: false,
-  path: '',
-  support: (value: unknown) => typeof value === 'number',
-  handler: {},
-  edit: function (key: string, value: boolean, parentPath: string | null = null) {
-    return `
-      <div class="json-edit__entry json-edit__number">
-        <label for="${parentPath}">${key}</label>
-        <input id="edit-${parentPath}" type="text" value="${value}" />
-      </div>
-    `;
-  },
-  view: function (key: string, value: boolean, parentPath: string | null = null) {
-    return `
-      <div class="json-view__entry json-view__number">
-        <label class="json-view__key" for="view-${parentPath}">
-          ${key} :
-        </label>
-        <p id="view-${parentPath}" class="json-view__value">
-          ${value}
-        </p>
-      </div>
-    `;
-  },
-  render: function (...args: any) {
-    return (this.editMode ? this.edit : this.view)(...args);
+import { get, set } from '../store/store.ts';
+
+import type { Component } from '../registries/componentsRegistry.ts';
+
+const handler = (event: Event) => {
+  if (!event?.target) {
+    return;
   }
+
+  switch (event.type) {
+    case 'submit':
+      console.log('coucou le sub');
+      break;
+    case 'click':
+    default:
+      const $element = event.target as HTMLElement;
+
+      if (!$element.dataset?.path) {
+        return;
+      }
+
+      set('edit', $element.dataset.path);
+      break;
+  }
+};
+
+const support = (value: unknown) => typeof value === 'number';
+
+const renderLabel = (key: string, path: string) => {
+  return `
+    <label class="component__node--key" for="${path}">
+      ${key} :
+    </label>
+  `;
+};
+
+const renderEdit = (value: number, path: string, key: string) => {
+  return `
+      <div
+        class="component-edit__entry"
+      >
+        <label for="edit-${path}">${key}</label>
+        <input id="edit-${path}" type="number" value="${value}" />
+        <button
+          data-event="number"
+          type="submit"
+        >
+          Save
+        </button>
+      </div>
+    `;
+};
+
+const renderView = (value: number, path: string, key: string) => {
+  return `
+      <div class="component-view__entry">
+        ${renderLabel(key, path)}
+        <button
+          id="view-${path}"
+          class="component__action component-view__value"
+          data-event="number"
+          data-path="${path}"
+          type="button"
+        >
+          ${value}
+        </button>
+      </div>
+    `;
+};
+
+const render = (value: number, parentPath: string | null = null, key: string) => {
+  const path = `${parentPath ? `${parentPath}.`: ''}${key}`;
+  const componentMode = get('edit') === path ? renderEdit : renderView;
+
+  return componentMode(value, path, key);
+};
+
+export const NumberComponent: Component = {
+  handler,
+  support,
+  render,
 };

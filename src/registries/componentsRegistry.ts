@@ -3,22 +3,28 @@ import { BooleanComponent } from '../components/BooleanComponent.ts';
 import { NumberComponent } from '../components/NumberComponent.ts';
 import { NullComponent } from '../components/NullComponent.ts';
 import { ObjectComponent } from '../components/ObjectComponent.ts';
+import { StringArrayComponent } from '../components/StringArrayComponent.ts';
 import { StringComponent } from '../components/StringComponent.ts';
 
 export interface Component {
   support: (value: unknown) => boolean,
-  render: (key: string, value: unknown, registry: (value: unknown) => Component, parentPath: string | null) => string,
+  handler: (event: Event) => void,
+  render: (value: any, parentPath: string | null, key: string, registry: (value: unknown) => Component) => string,
 }
 
-const registry: Component[] = [
-  ArrayComponent,
-  BooleanComponent,
-  NumberComponent,
-  NullComponent,
-  ObjectComponent,
-  StringComponent,
-];
+const registry: Record<string, Component> = {
+  stringArray: StringArrayComponent,
+  array: ArrayComponent,
+  boolean: BooleanComponent,
+  number: NumberComponent,
+  null: NullComponent,
+  object: ObjectComponent,
+  string: StringComponent,
+};
 
-export const componentRegistry = (value: unknown) => registry.reduce(
+export const getComponent = (value: unknown) => Object.values(registry).reduce(
   (acc: Component | undefined, component: Component) => !acc && component.support(value) ? component : acc, undefined
 );
+
+export const getHandler =
+  (componentCode: string) => registry[componentCode] ? registry[componentCode].handler : undefined;

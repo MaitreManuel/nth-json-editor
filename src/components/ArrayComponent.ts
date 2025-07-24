@@ -1,24 +1,32 @@
 import type { Component } from '../registries/componentsRegistry.ts';
 
-export const ArrayComponent = {
-  support: (value: unknown) => Array.isArray(value),
-  renderChildren: function (value: Record<string, unknown>, registry: (value: unknown) => Component, parentPath: string) {
-    return Object.entries(value).map(([childKey, childValue]: [string, unknown]) => {
-      const component: Component | undefined = registry(childValue);
+const handler = () => true;
 
-      return component ? component.render(childKey, childValue as unknown, registry, parentPath) : '';
-    }).join('');
-  },
-  render: function (key: string, value: unknown, registry: (value: unknown) => Component, parentPath: string | null = null) {
-    return `
-      <div class="json__node">
-        <label class="json__node--key" for="">
+const support = (value: unknown) => Array.isArray(value);
+
+const renderChildren = (value: unknown, parentPath: string | null = null, _key: string, registry: (value: unknown) => Component) => {
+  return Object.entries(value!).map(([childKey, childValue]: [string, unknown]) => {
+    const component: Component | undefined = registry(childValue);
+
+    return component ? component.render(childValue as unknown, parentPath, childKey, registry) : '';
+  }).join('');
+};
+
+const render = (value: unknown, parentPath: string | null = null, key: string, registry: (value: unknown) => Component) => {
+  return `
+      <div class="component__node">
+        <label class="component__node--key" for="">
           ${key} :
         </label>
-        <div class="json__node--value">
-          ${this.renderChildren(value as Record<string, unknown>, registry, `${parentPath ?? ''}[${key}]`)}
+        <div class="component__node--value">
+          ${renderChildren(value as Record<string, unknown>, `${parentPath ? `${parentPath}.`: ''}${key}`, '', registry)}
         </div>
       </div>
     `;
-  }
+};
+
+export const ArrayComponent: Component = {
+  handler,
+  support,
+  render,
 };

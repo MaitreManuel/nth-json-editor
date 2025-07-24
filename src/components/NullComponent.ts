@@ -1,8 +1,24 @@
 import type { Component } from '../registries/componentsRegistry.ts';
 
-export const NullComponent = {
-  support: (value: unknown) => value === null,
-  render: function (key: string, value: unknown, registry:  (value: unknown) => Component, parentPath: string | null = null) {
-    return '';
-  }
+const handler = () => true;
+const support = (value: unknown) => value === null;
+const render = (value: unknown, parentPath: string | null = null, key: string) => {
+  const path = `${parentPath ? `${parentPath}.`: ''}${key}`;
+
+  return `
+      <div class="component-view__entry component-view__number">
+        <label class="component-view__key" for="view-${path}">
+          ${key} :
+        </label>
+        <p id="view-${path}" class="component-view__value">
+          ${value}
+        </p>
+      </div>
+    `;
+}
+
+export const NullComponent: Component = {
+  handler,
+  support,
+  render,
 };
