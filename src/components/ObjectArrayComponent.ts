@@ -1,9 +1,11 @@
+import { Addable } from '../utils/Addable.ts';
 import { Deletable } from '../utils/Deletable.ts';
 import { Expandable } from '../utils/Expandable.ts';
 import { ObjectComponent } from './ObjectComponent.ts';
 import { Orderable } from '../utils/Orderable.ts';
 
 import type { Component } from '../registries/componentsRegistry.ts';
+import { get } from '../store/store.ts';
 
 const handler = () => false;
 
@@ -15,16 +17,24 @@ const support = (value: unknown) => (
 const renderExpanded = (value: unknown, path: string, _key: string, registry: (value: unknown) => Component) => {
   const template = Object.entries(value!).map(([childKey, childValue]: [string, unknown]) => {
     return `
-      ${ObjectComponent.render(childValue as unknown, path, childKey, registry)}
-      ${Orderable.renderButtons(path, parseInt(childKey))}
+      <div class="array-object__item--container">
+        ${ObjectComponent.render(childValue as unknown, path, childKey, registry, false)}
+        <div class="">
+          ${Deletable.renderButton(path, childKey)}
+        </div>
+        <div class="">
+          ${Orderable.renderButtons(path, parseInt(childKey))}
+        </div>
+      </div>
     `;
   }).join('');
 
   return `
     <div class="component__node--value">
       ${template}
+      ${Addable.render(path, get(`data.${path}`).length)}
     </div>
-  `
+  `;
 };
 
 const renderLabel = (key: string, path: string) => {

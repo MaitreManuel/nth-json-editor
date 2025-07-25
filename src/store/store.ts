@@ -19,8 +19,16 @@ const move = (path: string, index: number, indexToSwitch: number) => {
   document.dispatchEvent(new CustomEvent('DOMRefresh'));
 };
 
-const remove = (path: string) => {
-  _.unset(store, path);
+const remove = (path: string, index?: string) => {
+  if (index) {
+    const tabBuffer = [...get(path)];
+
+    tabBuffer.splice(parseInt(index), 1);
+
+    set(path, tabBuffer);
+  } else {
+    _.unset(store, path);
+  }
 
   document.dispatchEvent(new CustomEvent('DOMRefresh'));
 };

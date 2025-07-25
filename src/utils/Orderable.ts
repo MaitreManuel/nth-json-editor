@@ -20,29 +20,29 @@ const handler = (event: Event) => {
 };
 
 const renderButtons = (path: string, index: number) => {
-  return `
-    <div class="">
-       <button
-         class=""
-         data-event="orderable"
-         data-index="${index}"
-         data-path="${path}"
-         data-role="move-up"
-         ${index < 1 ? 'disabled' : '' }
-       >
-        &#129033;
-      </button>
-      <button
-         class=""
-         data-event="orderable"
-         data-index="${index}"
-         data-path="${path}"
-         data-role="move-down"
-         ${(index + 1) >= get(`data.${path}`).length ? 'disabled' : '' }
-       >
-        &#129035;
-      </button>
-    </div>
+  const cantMoveDown = (index + 1) >= get(`data.${path}`).length;
+  const cantMoveUp = index < 1;
+
+  return cantMoveDown && cantMoveUp ? '' : `
+    <button
+      class=""
+      data-event="orderable"
+      data-index="${index}"
+      data-path="${path}"
+      data-role="move-up"
+      ${cantMoveUp ? 'disabled' : '' }
+    >
+      &#129033;
+    </button><button
+      class=""
+      data-event="orderable"
+      data-index="${index}"
+      data-path="${path}"
+      data-role="move-down"
+      ${cantMoveDown ? 'disabled' : '' }
+    >
+      &#129035;
+    </button>
   `;
 };
 

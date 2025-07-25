@@ -1,5 +1,5 @@
 import { getComponent, getHandler } from './registries/componentsRegistry.ts';
-import { set } from './store/store.ts';
+import { get, set } from './store/store.ts';
 
 import data from '../../../data.json';
 
@@ -49,5 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMRefresh', () => {
+  console.log(get('add'));
+
   buildPage();
 });

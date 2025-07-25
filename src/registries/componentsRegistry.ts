@@ -14,7 +14,7 @@ import { StringComponent } from '../components/StringComponent.ts';
 export interface Component {
   support: (value: unknown) => boolean,
   handler: (event: Event) => void,
-  render: (value: any, parentPath: string | null, key: string, registry: (value: unknown) => Component) => string,
+  render: (value: any, parentPath: string | null, key: string, registry: (value: unknown) => Component, deletable?: boolean) => string,
 }
 
 const registry: Record<string, Component> = {

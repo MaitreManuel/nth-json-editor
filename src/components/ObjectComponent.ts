@@ -28,19 +28,19 @@ const renderExpanded = (value: unknown, path: string, _key: string, registry: (v
   return `
     <div class="component__node--value">
       ${renderChildren(value as Record<string, unknown>, path, '', registry)}
-      ${Addable.isAddFormOpened(path) ? Addable.renderForm(path) : Addable.renderButton(path)}
+      ${Addable.render(path)}
     </div>
   `;
 };
 
-const render = (value: unknown, parentPath: string | null = null, key: string, registry: (value: unknown) => Component) => {
+const render = (value: unknown, parentPath: string | null = null, key: string, registry: (value: unknown) => Component, deletable: boolean = true) => {
   const path = `${parentPath ? `${parentPath}.`: ''}${key}`;
 
   return `
     <div class="component__node">
       ${Expandable.renderButton(path)}
       ${renderLabel(key, path)}
-      ${Deletable.renderButton(path)}
+      ${deletable ? Deletable.renderButton(path) : ''}
       ${(Expandable.isExpanded(path) ? renderExpanded : Expandable.renderCollapsed)(value, path, key, registry)}
     </div>
   `;

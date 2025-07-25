@@ -21,21 +21,30 @@
   padding-left: 10px;
 }
 
+/*****************/
+/** Components ***/
+/*****************/
+
 .addable__container:not(.addable__container--form) {
   align-items: center;
 }
 
 .addable__container,
-.addable__container--form {
+.addable__container--form,
+.addable__entry {
   display: flex;
 }
 
-.addable__container.addable__container--form {
-  align-items: end;
+.addable__container--form button {
+  width: fit-content;
 }
 
-.addable__container .addable__key--container label,
-.addable__container .addable__value--container label {
+.addable__container.addable__container--form {
+  flex-direction: column;
+}
+
+.addable__container .addable__key label,
+.addable__container .addable__value label {
   display: block;
 }
 
@@ -43,5 +52,9 @@
   background-color: gray;
   height: 1px;
   margin-right: 10px;
-  width: 200px;
+  width: 150px;
+}
+
+.array-object__item--container {
+  display: flex;
 }
