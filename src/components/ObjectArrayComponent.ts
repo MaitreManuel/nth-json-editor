@@ -1,18 +1,30 @@
 import { Deletable } from '../utils/Deletable.ts';
 import { Expandable } from '../utils/Expandable.ts';
+import { ObjectComponent } from './ObjectComponent.ts';
+import { Orderable } from '../utils/Orderable.ts';
 
 import type { Component } from '../registries/componentsRegistry.ts';
 
 const handler = () => false;
 
-const support = (value: unknown) => Array.isArray(value);
+const support = (value: unknown) => (
+  Array.isArray(value)
+  && value.reduce((acc: boolean, current: unknown) => acc ? typeof current === 'object' && current !== null && !Array.isArray(current) : acc, true)
+);
 
-const renderChildren = (value: unknown, parentPath: string | null = null, _key: string, registry: (value: unknown) => Component) => {
-  return Object.entries(value!).map(([childKey, childValue]: [string, unknown]) => {
-    const component: Component | undefined = registry(childValue);
-
-    return component ? component.render(childValue as unknown, parentPath, childKey, registry) : '';
+const renderExpanded = (value: unknown, path: string, _key: string, registry: (value: unknown) => Component) => {
+  const template = Object.entries(value!).map(([childKey, childValue]: [string, unknown]) => {
+    return `
+      ${ObjectComponent.render(childValue as unknown, path, childKey, registry)}
+      ${Orderable.renderButtons(path, parseInt(childKey))}
+    `;
   }).join('');
+
+  return `
+    <div class="component__node--value">
+      ${template}
+    </div>
+  `
 };
 
 const renderLabel = (key: string, path: string) => {
@@ -20,14 +32,6 @@ const renderLabel = (key: string, path: string) => {
     <label class="component__node--key" for="${path}">
       ${key} :
     </label>
-  `;
-};
-
-const renderExpanded = (value: unknown, parentPath: string, key: string, registry: (value: unknown) => Component) => {
-  return `
-    <div class="component__node--value">
-      ${renderChildren(value as Record<string, unknown>, `${parentPath ? `${parentPath}.`: ''}${key}`, '', registry)}
-    </div>
   `;
 };
 
@@ -44,7 +48,7 @@ const render = (value: unknown, parentPath: string | null = null, key: string, r
   `;
 };
 
-export const ArrayComponent: Component = {
+export const ObjectArrayComponent: Component = {
   handler,
   support,
   render,

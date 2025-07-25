@@ -20,3 +20,28 @@
 .component__node .component__node--value {
   padding-left: 10px;
 }
+
+.addable__container:not(.addable__container--form) {
+  align-items: center;
+}
+
+.addable__container,
+.addable__container--form {
+  display: flex;
+}
+
+.addable__container.addable__container--form {
+  align-items: end;
+}
+
+.addable__container .addable__key--container label,
+.addable__container .addable__value--container label {
+  display: block;
+}
+
+.addable__container .addable__separator {
+  background-color: gray;
+  height: 1px;
+  margin-right: 10px;
+  width: 200px;
+}

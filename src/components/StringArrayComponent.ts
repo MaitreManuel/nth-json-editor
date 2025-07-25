@@ -37,7 +37,6 @@ const support = (value: unknown) => (
 const renderEdit = (value: string[], path: string | null = null, key: string) => {
   return `
       <form
-        id="test"
         class="component__node"
         data-event="stringArray"
         data-path="${path}"
@@ -50,10 +49,9 @@ const renderEdit = (value: string[], path: string | null = null, key: string) =>
         <button
           data-event="stringArray"
           data-role="submit"
-          form="test"
           type="submit"
         >
-          Save
+          &#10003;
         </button>
         <div class="component__node--value">
           <textarea
@@ -67,7 +65,7 @@ const renderEdit = (value: string[], path: string | null = null, key: string) =>
 
 const renderExpanded = (value: string[], path: string | null = null) => {
   return `
-      <div >
+      <div>
         <button
           id="view-${path}"
           class="component__action component-view__value"
@@ -76,7 +74,7 @@ const renderExpanded = (value: string[], path: string | null = null) => {
           data-role="edit"
           type="button"
         >
-          Edit
+          &#9998;
         </button>
         <div class="component__node--value">
           ${value.map((item) => `<p class="m-0">${item}</p>`).join('')}

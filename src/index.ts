@@ -43,6 +43,7 @@ const rootRender = (rawNodes: object) => {
 
 document.addEventListener('DOMContentLoaded', () => {
   set('data', data);
+  set('snapshot', data);
 
   buildPage();
 });

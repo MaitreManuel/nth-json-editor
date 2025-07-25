@@ -3,25 +3,25 @@ import { get, set } from '../store/store.ts';
 import type { Component } from '../registries/componentsRegistry.ts';
 
 const handler = (event: Event) => {
-  if (!event?.target) {
-    return;
-  }
+  const element = event?.target as HTMLElement | undefined;
 
-  switch (event.type) {
-    case 'submit':
-      console.log('coucou le sub');
+  switch(true) {
+    case element?.dataset.role === 'edit' && event.type === 'click':
+      set('edit', element.dataset.path);
       break;
-    case 'click':
-    default:
-      const $element = event.target as HTMLElement;
-
-      if (!$element.dataset?.path) {
-        return;
-      }
-
-      set('edit', $element.dataset.path);
+    case element?.dataset.role === 'form' && event.type === 'submit':
+      save(element as HTMLFormElement);
       break;
   }
+};
+
+const save = (element: HTMLFormElement) => {
+  const rawValue = element.elements.namedItem('numberValue') as HTMLInputElement;
+
+  const cleanValue = parseInt(rawValue.value.trim());
+
+  set(`data.${element.dataset.path}`, cleanValue);
+  set('edit', undefined);
 };
 
 const support = (value: unknown) => typeof value === 'number';
@@ -36,36 +36,54 @@ const renderLabel = (key: string, path: string) => {
 
 const renderEdit = (value: number, path: string, key: string) => {
   return `
-      <div
-        class="component-edit__entry"
+      <form
+        class="component__node"
+        data-event="number"
+        data-path="${path}"
+        data-role="form"
+        onsubmit="return false;"
       >
         <label for="edit-${path}">${key}</label>
-        <input id="edit-${path}" type="number" value="${value}" />
+        <input
+          id="edit-${path}"
+          name="numberValue"
+          type="number"
+          value="${value}"
+        />
         <button
           data-event="number"
           type="submit"
         >
-          Save
+          &#10003;
         </button>
-      </div>
+      </form>
     `;
 };
 
 const renderView = (value: number, path: string, key: string) => {
   return `
-      <div class="component-view__entry">
-        ${renderLabel(key, path)}
-        <button
-          id="view-${path}"
-          class="component__action component-view__value"
-          data-event="number"
-          data-path="${path}"
-          type="button"
-        >
-          ${value}
-        </button>
-      </div>
-    `;
+    <div class="component-view__entry component-view__number">
+      ${renderLabel(key, path)}
+      <button
+        id="view-${path}"
+        class="component__action component-view__value"
+        data-event="number"
+        data-path="${path}"
+        data-role="edit"
+        type="button"
+      >
+        ${value}
+      </button>
+      <button
+        data-event="number"
+        data-path="${path}"
+        data-role="edit"
+        type="button"
+      >
+        &#9998;
+      </button>
+    </div>
+  `;
 };
 
 const render = (value: number, parentPath: string | null = null, key: string) => {

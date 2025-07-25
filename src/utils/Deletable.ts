@@ -7,7 +7,7 @@ const handler = (event: Event) => {
     case !element || !element.dataset.path:
       break;
     case element?.dataset.role === 'delete' && event.type === 'click':
-      remove(element.dataset.path);
+      remove(`data.${element.dataset.path}`);
       break;
   }
 };

@@ -1,5 +1,4 @@
 import { get, set } from '../store/store.ts';
-import type { Component } from '../registries/componentsRegistry.ts';
 
 const handler = (event: Event) => {
   const element = event?.target as HTMLElement | undefined;
@@ -44,14 +43,6 @@ const renderButton = (path: string) => {
   `;
 };
 
-const renderChildren = (value: unknown, parentPath: string | null = null, _key: string, registry: (value: unknown) => Component) => {
-  return Object.entries(value!).map(([childKey, childValue]: [string, unknown]) => {
-    const component: Component | undefined = registry(childValue);
-
-    return component ? component.render(childValue as unknown, parentPath, childKey, registry) : '';
-  }).join('');
-};
-
 const renderCollapsed = (_key: unknown, path: string) => {
   return `
     <button
@@ -65,14 +56,6 @@ const renderCollapsed = (_key: unknown, path: string) => {
   `;
 };
 
-const renderExpanded = (value: unknown, parentPath: string | null = null, _key: string, registry: (value: unknown) => Component) => {
-  return `
-    <div class="component__node--value">
-      ${renderChildren(value as Record<string, unknown>, `${parentPath}`, '', registry)}
-    </div>
-  `;
-};
-
 const support = () => false;
 const render = () => '';
 
@@ -83,5 +66,4 @@ export const Expandable = {
   render,
   renderButton,
   renderCollapsed,
-  renderExpanded,
 };
