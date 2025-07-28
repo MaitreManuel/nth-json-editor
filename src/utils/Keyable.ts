@@ -1,24 +1,25 @@
-import { get, set } from '../store/store.ts';
+import { get, set, setRawData } from '../store/store.ts';
 
 const handler = (event: Event) => {
   const element = event?.target as HTMLElement | undefined;
-  const keyable = get('keyable') as string[] | undefined;
+  const keyableEdit = get('keyableEdit') as string[] | undefined;
 
   const closeKeyable = (element: HTMLElement) => {
-    if (keyable?.length) {
-      set('keyable', keyable.filter((path: string) => path !== element.dataset.path));
+    if (keyableEdit?.length) {
+      set('keyableEdit', keyableEdit.filter((path: string) => path !== element.dataset.path));
     }
   };
 
   switch(true) {
     case !element || !element.dataset.path:
       break;
-    case element?.dataset.role === 'add' && event.type === 'click':
-      if (keyable?.length) {
-        set('keyable', [...keyable, element.dataset.path]);
+    case element?.dataset.role === 'add-key' && event.type === 'click':
+      if (keyableEdit?.length) {
+        set('keyableEdit', [...keyableEdit, element.dataset.path]);
       } else {
-        set('keyable', [element.dataset.path]);
+        set('keyableEdit', [element.dataset.path]);
       }
+
       break;
     case element?.dataset.role === 'cancel' && event.type === 'click':
       closeKeyable(element);
@@ -30,16 +31,13 @@ const handler = (event: Event) => {
   }
 };
 
-const isKeyableOpened = (path: string): boolean => (get('keyable') as string[])?.includes(path);
+const isKeyableOpened = (path: string): boolean => (get('keyableEdit') as string[])?.includes(path);
 
 const save = (element: HTMLFormElement) => {
   const rawKey = element.elements.namedItem('keyableKey') as HTMLInputElement;
   const rawValue = element.elements.namedItem('keyableValue') as HTMLInputElement;
 
-  const cleanKey = rawKey.value.trim();
-  const cleanValue = rawValue.value.trim();
-
-  set(`data.${element.dataset.path}.${cleanKey}`, cleanValue);
+  setRawData(rawValue.value.trim(), `data.${element.dataset.path}.${rawKey.value.trim()}`);
 };
 
 const renderButton = (path: string) => {
@@ -50,7 +48,7 @@ const renderButton = (path: string) => {
         class=""
         data-event="keyable"
         data-path="${path}"
-        data-role="add"
+        data-role="add-key"
       >
         &#43;
       </button>

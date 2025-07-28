@@ -6,16 +6,22 @@ import { addArrayPath } from '../store/store.ts';
 
 
 import type { Component } from '../registries/componentsRegistry.ts';
+import { Orderable } from '../utils/Orderable.ts';
 
 const handler = () => false;
 
 const support = (value: unknown) => Array.isArray(value);
 
-const renderChildren = (value: unknown, parentPath: string | null = null, registry: (value: unknown) => Component) => {
+const renderChildren = (value: unknown, path: string , registry: (value: unknown) => Component) => {
   return Object.entries(value!).map(([childKey, childValue]: [string, unknown]) => {
     const component: Component | undefined = registry(childValue);
 
-    return component ? component.render(childValue as unknown, parentPath, childKey, registry) : '';
+    return component ? `
+        <div class="">
+          ${component.render(childValue as unknown, path, childKey, registry)}
+          ${Orderable.renderButtons(path, parseInt(childKey))}
+        </div>
+      ` : '';
   }).join('');
 };
 

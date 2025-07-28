@@ -1,44 +1,44 @@
-import { get, set } from '../store/store.ts';
+import { get, set, setRawData } from '../store/store.ts';
+
+import type { EnhancedHTMLFormElement } from '../types.d.ts';
 
 const handler = (event: Event) => {
   const element = event?.target as HTMLElement | undefined;
-  const itemable = get('itemable') as string[] | undefined;
+  const itemEdit = get('item-edit') as string[] | undefined;
 
   const closeItemable = (element: HTMLElement) => {
-    if (itemable?.length) {
-      set('itemable', itemable.filter((path: string) => path !== element.dataset.path));
+    if (itemEdit?.length) {
+      set('itemEdit', itemEdit.filter((path: string) => path !== element.dataset.path));
     }
   };
 
   switch(true) {
     case !element || !element.dataset.path:
       break;
-    case element?.dataset.role === 'add' && event.type === 'click':
-      if (itemable?.length) {
-        set('itemable', [...itemable, element.dataset.path]);
+    case element?.dataset.role === 'add-item' && event.type === 'click':
+      if (itemEdit?.length) {
+        set('itemEdit', [...itemEdit, element.dataset.path]);
       } else {
-        set('itemable', [element.dataset.path]);
+        set('itemEdit', [element.dataset.path]);
       }
-      closeItemable(element);
+
       break;
     case element?.dataset.role === 'cancel' && event.type === 'click':
       closeItemable(element);
       break;
     case element?.dataset.role === 'form' && event.type === 'submit':
-      save(element as HTMLFormElement);
+      save(element as EnhancedHTMLFormElement);
       closeItemable(element);
       break;
   }
 };
 
-const isItemableOpened = (path: string): boolean => (get('itemable') as string[])?.includes(path);
+const isItemableOpened = (path: string): boolean => (get('itemEdit') as string[])?.includes(path);
 
-const save = (element: HTMLFormElement) => {
+const save = (element: EnhancedHTMLFormElement) => {
   const rawValue = element.elements.namedItem('itemableValue') as HTMLTextAreaElement;
-  const tab = get(`data.${element.dataset.path}`);
 
-  set(`data.${element.dataset.path}`, [...tab, JSON.parse(rawValue.value)]);
-  set('itemable', undefined);
+  setRawData(rawValue.value.trim(), `data.${element.dataset.path}`);
 };
 
 const renderButton = (path: string) => {
@@ -49,7 +49,7 @@ const renderButton = (path: string) => {
         class=""
         data-event="itemable"
         data-path="${path}"
-        data-role="add"
+        data-role="add-item"
       >
         &#43;
       </button>
@@ -69,6 +69,7 @@ const renderForm = (path: string) => {
       <div class="">
         <textarea
           name="itemableValue"
+          cols="50"
           rows="10"
         ></textarea>
       </div>

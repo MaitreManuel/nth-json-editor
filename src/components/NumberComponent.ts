@@ -1,7 +1,8 @@
 import { get, set } from '../store/store.ts';
 
-import type { Component } from '../registries/componentsRegistry.ts';
 import { Deletable } from '../utils/Deletable.ts';
+
+import type { Component } from '../registries/componentsRegistry.ts';
 
 const handler = (event: Event) => {
   const element = event?.target as HTMLElement | undefined;

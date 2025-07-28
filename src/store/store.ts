@@ -7,6 +7,10 @@ const addArrayPath = (path: string) => {
   _.set(store, 'arrayPaths', [...(get(`arrayPaths`) || []), path]);
 };
 
+const addArrayItem = () => {
+
+};
+
 const get = (path: string) => {
   return _.get(store, path);
 };
@@ -51,10 +55,35 @@ const set = (path: string, value: unknown) => {
   document.dispatchEvent(new CustomEvent('DOMRefresh'));
 };
 
+const setRawData = (value: string, path: string) => {
+  let typedValue: unknown = value;
+
+  try {
+    typedValue = JSON.parse(value);
+  } catch (error) {}
+
+  switch (true) {
+    case ['false', 'true'].includes(value):
+      typedValue = value === 'true';
+      break;
+    case !isNaN(Number(value)):
+      typedValue = Number(value);
+      break;
+  }
+
+  if (isArrayPath(path)) {
+    set(path, [...get(path), typedValue]);
+  } else {
+    set(path, typedValue);
+  }
+};
+
 export {
+  addArrayItem,
   addArrayPath,
   get,
   move,
   remove,
-  set
+  set,
+  setRawData,
 };

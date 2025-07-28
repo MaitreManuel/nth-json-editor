@@ -1,5 +1,7 @@
 import { get, set } from '../store/store.ts';
 
+import { Deletable } from '../utils/Deletable.ts';
+
 import type { Component } from '../registries/componentsRegistry.ts';
 
 const handler = (event: Event) => {
@@ -93,6 +95,7 @@ const renderView = (value: string, path: string, key: string) => {
       >
         &#9998;
       </button>
+      ${Deletable.renderButton(path)}
     </div>
   `;
 };
