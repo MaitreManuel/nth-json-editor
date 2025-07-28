@@ -9,6 +9,9 @@ const handler = (event: Event) => {
     case element?.dataset.role === 'edit' && event.type === 'click':
       set('edit', element.dataset.path);
       break;
+    case element?.dataset.role === 'cancel' && event.type === 'click':
+      set('edit', undefined);
+      break;
     case element?.dataset.role === 'form' && event.type === 'submit':
       save(element as HTMLFormElement);
       break;
@@ -54,6 +57,14 @@ const renderEdit = (value: boolean, path: string, key: string) => {
           type="submit"
         >
           &#10003;
+        </button>
+        <button
+          data-event="boolean"
+          data-path="${path}"
+          data-role="cancel"
+          type="button"
+        >
+          &#9932;
         </button>
       </form>
     `;

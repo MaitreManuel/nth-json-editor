@@ -43,7 +43,7 @@ const renderButton = (path: string) => {
   `;
 };
 
-const renderCollapsed = (_key: unknown, path: string) => {
+const renderCollapsed = (_value: unknown, path: string) => {
   return `
     <button
       class=""

@@ -1,4 +1,4 @@
-import { Addable } from '../utils/Addable.ts';
+import { Itemable } from '../utils/Itemable.ts';
 import { Deletable } from '../utils/Deletable.ts';
 import { Expandable } from '../utils/Expandable.ts';
 import { ObjectComponent } from './ObjectComponent.ts';
@@ -32,7 +32,7 @@ const renderExpanded = (value: unknown, path: string, _key: string, registry: (v
   return `
     <div class="component__node--value">
       ${template}
-      ${Addable.render(path, get(`data.${path}`).length)}
+      ${Itemable.render(path)}
     </div>
   `;
 };

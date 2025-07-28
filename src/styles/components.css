@@ -24,37 +24,36 @@
 /*****************/
 /** Components ***/
 /*****************/
-
-.addable__container:not(.addable__container--form) {
-  align-items: center;
-}
-
-.addable__container,
-.addable__container--form,
-.addable__entry {
+.array-object__item--container {
   display: flex;
 }
 
-.addable__container--form button {
+.formable__container:not(.formable__container--form) {
+  align-items: center;
+}
+
+.formable__container,
+.formable__container--form,
+.formable__entry {
+  display: flex;
+}
+
+.formable__container--form button {
   width: fit-content;
 }
 
-.addable__container.addable__container--form {
+.formable__container.formable__container--form {
   flex-direction: column;
 }
 
-.addable__container .addable__key label,
-.addable__container .addable__value label {
+.formable__container .formable__key label,
+.formable__container .formable__value label {
   display: block;
 }
 
-.addable__container .addable__separator {
+.formable__container .formable__separator {
   background-color: gray;
   height: 1px;
   margin-right: 10px;
   width: 150px;
-}
-
-.array-object__item--container {
-  display: flex;
 }

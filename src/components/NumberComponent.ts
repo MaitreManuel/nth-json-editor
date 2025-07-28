@@ -1,6 +1,7 @@
 import { get, set } from '../store/store.ts';
 
 import type { Component } from '../registries/componentsRegistry.ts';
+import { Deletable } from '../utils/Deletable.ts';
 
 const handler = (event: Event) => {
   const element = event?.target as HTMLElement | undefined;
@@ -8,6 +9,9 @@ const handler = (event: Event) => {
   switch(true) {
     case element?.dataset.role === 'edit' && event.type === 'click':
       set('edit', element.dataset.path);
+      break;
+    case element?.dataset.role === 'cancel' && event.type === 'click':
+      set('edit', undefined);
       break;
     case element?.dataset.role === 'form' && event.type === 'submit':
       save(element as HTMLFormElement);
@@ -56,6 +60,14 @@ const renderEdit = (value: number, path: string, key: string) => {
         >
           &#10003;
         </button>
+        <button
+          data-event="number"
+          data-path="${path}"
+          data-role="cancel"
+          type="button"
+        >
+          &#9932;
+        </button>
       </form>
     `;
 };
@@ -82,6 +94,7 @@ const renderView = (value: number, path: string, key: string) => {
       >
         &#9998;
       </button>
+      ${Deletable.renderButton(path)}
     </div>
   `;
 };

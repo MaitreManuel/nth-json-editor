@@ -3,8 +3,16 @@ import _ from 'https://cdn.jsdelivr.net/npm/lodash-es@4.17.21/+esm';
 
 const store: Record<string, unknown> = {};
 
+const addArrayPath = (path: string) => {
+  _.set(store, 'arrayPaths', [...(get(`arrayPaths`) || []), path]);
+};
+
 const get = (path: string) => {
   return _.get(store, path);
+};
+
+const isArrayPath = (path: string) => {
+  return get(`arrayPaths`).includes(path);
 };
 
 const move = (path: string, index: number, indexToSwitch: number) => {
@@ -19,13 +27,17 @@ const move = (path: string, index: number, indexToSwitch: number) => {
   document.dispatchEvent(new CustomEvent('DOMRefresh'));
 };
 
-const remove = (path: string, index?: string) => {
-  if (index) {
-    const tabBuffer = [...get(path)];
+const remove = (path: string) => {
+  const splitPath = path.split('.');
+  const parentPath = splitPath.slice(0, splitPath.length - 1).join('.');
 
-    tabBuffer.splice(parseInt(index), 1);
+  if (isArrayPath(parentPath)) {
+    const index = parseInt(splitPath[splitPath.length -1]);
+    const value = get(parentPath);
 
-    set(path, tabBuffer);
+    value.splice(index, 1);
+
+    set(parentPath, value);
   } else {
     _.unset(store, path);
   }
@@ -39,4 +51,10 @@ const set = (path: string, value: unknown) => {
   document.dispatchEvent(new CustomEvent('DOMRefresh'));
 };
 
-export { get, move, remove, set };
+export {
+  addArrayPath,
+  get,
+  move,
+  remove,
+  set
+};

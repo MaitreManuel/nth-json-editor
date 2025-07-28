@@ -2,7 +2,7 @@ import { Deletable } from '../utils/Deletable.ts';
 import { Expandable } from '../utils/Expandable.ts';
 
 import type { Component } from '../registries/componentsRegistry.ts';
-import { Addable } from '../utils/Addable.ts';
+import { Keyable } from '../utils/Keyable.ts';
 
 const handler = () => false;
 
@@ -28,7 +28,7 @@ const renderExpanded = (value: unknown, path: string, _key: string, registry: (v
   return `
     <div class="component__node--value">
       ${renderChildren(value as Record<string, unknown>, path, '', registry)}
-      ${Addable.render(path)}
+      ${Keyable.render(path)}
     </div>
   `;
 };
