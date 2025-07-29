@@ -12,21 +12,28 @@ const handler = (event: Event) => {
     case element?.dataset.role === 'edit' && event.type === 'click':
       set('edit', element.dataset.path);
       break;
-    case element?.dataset.role === 'form' && event.type === 'submit':
-      save(element as HTMLFormElement);
+    case element?.dataset.role === 'submit' && event.type === 'click':
+      const formElement: HTMLFormElement | null = element.closest('[data-role="form"]');
+
+      if (formElement) {
+        save(formElement);
+      }
+
       break;
   }
 };
 
 const save = (element: HTMLFormElement) => {
-  const rawValue = element.elements.namedItem('stringArrayValue') as HTMLTextAreaElement;
+  const inputElement: HTMLInputElement | null = element.querySelector('[data-save="stringArrayValue"]');
 
-  const cleanValue = rawValue.value.split('\n').reduce(
-    (acc: string[], value: string) => value ? [...acc, value.trim()] : acc, []
-  );
+  if (inputElement) {
+    const value: string[] = inputElement.value.split('\n').reduce(
+      (acc: string[], value: string) => value ? [...acc, value.trim()] : acc, []
+    );
 
-  set(`data.${element.dataset.path}`, cleanValue);
-  set('edit', undefined);
+    set(`data.${element.dataset.path}`, value);
+    set('edit', undefined);
+  }
 };
 
 const support = (value: unknown) => (
@@ -36,30 +43,32 @@ const support = (value: unknown) => (
 
 const renderEdit = (value: string[], path: string | null = null, key: string) => {
   return `
-      <form
+      <div
         class="component__node"
-        data-event="stringArray"
         data-path="${path}"
         data-role="form"
-        onsubmit="return false;"
       >
-        <label class="component__node--key" for="">
+        <label
+          class="component__node--key"
+          for=""
+        >
           ${key} :
         </label>
         <button
           data-event="stringArray"
           data-role="submit"
-          type="submit"
+          type="button"
         >
           &#10003;
         </button>
         <div class="component__node--value">
           <textarea
+            data-save="stringArrayValue"
             name="stringArrayValue"
             rows="${value.length}"
           >${value.join('\n')}</textarea>
         </div>
-      </form>
+      </div>
     `;
 };
 

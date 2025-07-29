@@ -4,7 +4,7 @@ import type { EnhancedHTMLFormElement } from '../types.d.ts';
 
 const handler = (event: Event) => {
   const element = event?.target as HTMLElement | undefined;
-  const itemEdit = get('item-edit') as string[] | undefined;
+  const itemEdit = get('itemEdit') as string[] | undefined;
 
   const closeItemable = (element: HTMLElement) => {
     if (itemEdit?.length) {
@@ -13,8 +13,6 @@ const handler = (event: Event) => {
   };
 
   switch(true) {
-    case !element || !element.dataset.path:
-      break;
     case element?.dataset.role === 'add-item' && event.type === 'click':
       if (itemEdit?.length) {
         set('itemEdit', [...itemEdit, element.dataset.path]);
@@ -26,19 +24,24 @@ const handler = (event: Event) => {
     case element?.dataset.role === 'cancel' && event.type === 'click':
       closeItemable(element);
       break;
-    case element?.dataset.role === 'form' && event.type === 'submit':
-      save(element as EnhancedHTMLFormElement);
-      closeItemable(element);
+    case element?.dataset.role === 'submit' && event.type === 'click':
+      const formElement: HTMLFormElement | null = element.closest('[data-role="form"]');
+
+      if (formElement) {
+        save(formElement);
+        closeItemable(formElement);
+      }
+
       break;
   }
 };
 
 const isItemableOpened = (path: string): boolean => (get('itemEdit') as string[])?.includes(path);
 
-const save = (element: EnhancedHTMLFormElement) => {
-  const rawValue = element.elements.namedItem('itemableValue') as HTMLTextAreaElement;
+const save = (element: HTMLFormElement) => {
+  const inputElement = element.querySelector('[data-save="itemableValue"]') as HTMLTextAreaElement;
 
-  setRawData(rawValue.value.trim(), `data.${element.dataset.path}`);
+  setRawData(inputElement.value.trim(), `data.${element.dataset.path}`);
 };
 
 const renderButton = (path: string) => {
@@ -59,15 +62,14 @@ const renderButton = (path: string) => {
 
 const renderForm = (path: string) => {
   return `
-    <form
+    <div
       class="formable__container formable__container--form"
-      data-event="itemable"
       data-path="${path}"
       data-role="form"
-      onsubmit="return false;"
     >
       <div class="">
         <textarea
+          data-save="itemableValue"
           name="itemableValue"
           cols="50"
           rows="10"
@@ -77,7 +79,7 @@ const renderForm = (path: string) => {
         <button
           data-event="itemable"
           data-role="submit"
-          type="submit"
+          type="button"
         >
           &#10003;
         </button>
@@ -90,7 +92,7 @@ const renderForm = (path: string) => {
           &#9932;
         </button>
       </div>
-    </form>
+    </div>
   `;
 };
 

@@ -37,6 +37,7 @@ const renderButton = (path: string) => {
       data-path="${path}"
       data-role="${expandedState ? 'collapse' : 'expand'}"
       ${editState ? 'disabled' : '' }
+      type="button"
     >
       ${expandedState ? '&#11206;' : '&#11208;'}
     </button>
@@ -50,6 +51,7 @@ const renderCollapsed = (_value: unknown, path: string) => {
       data-event="expandable"
       data-path="${path}"
       data-role="expand"
+      type="button"
     >
       { ... }
     </button>

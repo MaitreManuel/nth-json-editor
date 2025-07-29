@@ -14,19 +14,26 @@ const handler = (event: Event) => {
     case element?.dataset.role === 'cancel' && event.type === 'click':
       set('edit', undefined);
       break;
-    case element?.dataset.role === 'form' && event.type === 'submit':
-      save(element as HTMLFormElement);
+    case element?.dataset.role === 'submit' && event.type === 'click':
+      const formElement: HTMLFormElement | null = element.closest('[data-role="form"]');
+
+      if (formElement) {
+        save(formElement);
+      }
+
       break;
   }
 };
 
 const save = (element: HTMLFormElement) => {
-  const rawValue = element.elements.namedItem('numberValue') as HTMLInputElement;
+  const inputElement: HTMLInputElement | null = element.querySelector('[data-save="numberValue"]');
 
-  const cleanValue = parseInt(rawValue.value.trim());
+  if (inputElement) {
+    const value: number = parseInt(inputElement.value);
 
-  set(`data.${element.dataset.path}`, cleanValue);
-  set('edit', undefined);
+    set(`data.${element.dataset.path}`, value);
+    set('edit', undefined);
+  }
 };
 
 const support = (value: unknown) => typeof value === 'number';
@@ -41,23 +48,23 @@ const renderLabel = (key: string, path: string) => {
 
 const renderEdit = (value: number, path: string, key: string) => {
   return `
-      <form
+      <div
         class="component__node"
-        data-event="number"
         data-path="${path}"
         data-role="form"
-        onsubmit="return false;"
       >
         <label for="edit-${path}">${key}</label>
         <input
           id="edit-${path}"
+          data-save="numberValue"
           name="numberValue"
           type="number"
           value="${value}"
         />
         <button
           data-event="number"
-          type="submit"
+          data-role="submit"
+          type="button"
         >
           &#10003;
         </button>
@@ -69,7 +76,7 @@ const renderEdit = (value: number, path: string, key: string) => {
         >
           &#9932;
         </button>
-      </form>
+      </div>
     `;
 };
 

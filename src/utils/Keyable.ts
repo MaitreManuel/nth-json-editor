@@ -1,4 +1,5 @@
 import { get, set, setRawData } from '../store/store.ts';
+import type { EnhancedHTMLFormElement } from '../types';
 
 const handler = (event: Event) => {
   const element = event?.target as HTMLElement | undefined;
@@ -11,8 +12,6 @@ const handler = (event: Event) => {
   };
 
   switch(true) {
-    case !element || !element.dataset.path:
-      break;
     case element?.dataset.role === 'add-key' && event.type === 'click':
       if (keyableEdit?.length) {
         set('keyableEdit', [...keyableEdit, element.dataset.path]);
@@ -24,9 +23,14 @@ const handler = (event: Event) => {
     case element?.dataset.role === 'cancel' && event.type === 'click':
       closeKeyable(element);
       break;
-    case element?.dataset.role === 'form' && event.type === 'submit':
-      save(element as HTMLFormElement);
-      closeKeyable(element);
+    case element?.dataset.role === 'submit' && event.type === 'click':
+      const formElement: EnhancedHTMLFormElement | null = element.closest('[data-role="form"]');
+
+      if (formElement) {
+        save(formElement);
+        closeKeyable(formElement);
+      }
+
       break;
   }
 };
@@ -34,10 +38,10 @@ const handler = (event: Event) => {
 const isKeyableOpened = (path: string): boolean => (get('keyableEdit') as string[])?.includes(path);
 
 const save = (element: HTMLFormElement) => {
-  const rawKey = element.elements.namedItem('keyableKey') as HTMLInputElement;
-  const rawValue = element.elements.namedItem('keyableValue') as HTMLInputElement;
+  const keyElement = element.querySelector('[data-save="keyableKey"]') as HTMLInputElement;
+  const valueElement = element.querySelector('[data-save="keyableValue"]') as HTMLInputElement;
 
-  setRawData(rawValue.value.trim(), `${element.dataset.path}.${rawKey.value.trim()}`);
+  setRawData(valueElement.value.trim(), `${element.dataset.path}.${keyElement.value.trim()}`);
 };
 
 const renderButton = (path: string) => {
@@ -58,12 +62,10 @@ const renderButton = (path: string) => {
 
 const renderForm = (path: string) => {
   return `
-    <form
+    <div
       class="formable__container formable__container--form"
-      data-event="keyable"
       data-path="${path}"
       data-role="form"
-      onsubmit="return false;"
     >
       <div class="formable__entry">
         <div class="formable__key">
@@ -72,6 +74,7 @@ const renderForm = (path: string) => {
           </label>
           <input
             id="add-key-${path}"
+            data-save="keyableKey"
             name="keyableKey"
             type="text"
           />
@@ -82,6 +85,7 @@ const renderForm = (path: string) => {
           </label>
           <input
             id="add-value-${path}"
+            data-save="keyableValue"
             name="keyableValue"
             type="text"
           />
@@ -91,7 +95,7 @@ const renderForm = (path: string) => {
         <button
           data-event="keyable"
           data-role="submit"
-          type="submit"
+          type="button"
         >
           &#10003;
         </button>
@@ -104,7 +108,7 @@ const renderForm = (path: string) => {
           &#9932;
         </button>
       </div>
-    </form>
+    </div>
   `;
 };
 
