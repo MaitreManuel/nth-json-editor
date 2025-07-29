@@ -6,12 +6,18 @@ import data from '../../../data.json';
 import './styles/theme.css';
 import './styles/components.css';
 import './styles/atomic.css';
+import { Keyable } from './utils/Keyable.ts';
 
 const buildPage = () => {
   const $container = document.querySelector('#nth-json-editor');
 
   if ($container) {
-    $container.innerHTML = rootRender(data);
+    $container.innerHTML = `
+      <div class="component__node--value">
+        ${rootRender(data)}
+        ${Keyable.render()}
+      </div>
+    `;
 
     document.querySelectorAll('[data-event]').forEach(
       (element) => {

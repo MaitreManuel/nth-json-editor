@@ -1,8 +1,8 @@
 import { Deletable } from '../utils/Deletable.ts';
 import { Expandable } from '../utils/Expandable.ts';
+import { Keyable } from '../utils/Keyable.ts';
 
 import type { Component } from '../registries/componentsRegistry.ts';
-import { Keyable } from '../utils/Keyable.ts';
 
 const handler = () => false;
 

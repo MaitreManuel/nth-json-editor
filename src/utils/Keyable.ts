@@ -37,7 +37,7 @@ const save = (element: HTMLFormElement) => {
   const rawKey = element.elements.namedItem('keyableKey') as HTMLInputElement;
   const rawValue = element.elements.namedItem('keyableValue') as HTMLInputElement;
 
-  setRawData(rawValue.value.trim(), `data.${element.dataset.path}.${rawKey.value.trim()}`);
+  setRawData(rawValue.value.trim(), `${element.dataset.path}.${rawKey.value.trim()}`);
 };
 
 const renderButton = (path: string) => {
@@ -110,8 +110,11 @@ const renderForm = (path: string) => {
 
 const support = () => false;
 
-const render = (path: string) =>
-  `${(Keyable.isKeyableOpened(path) ? Keyable.renderForm : Keyable.renderButton)(path)}`;
+const render = (path?: string) => {
+  const prefixRootPath = `data${path ? `.${path}` : ''}`;
+
+  return `${(Keyable.isKeyableOpened(prefixRootPath) ? Keyable.renderForm : Keyable.renderButton)(prefixRootPath)}`;
+};
 
 export const Keyable = {
   handler,
