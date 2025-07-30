@@ -16,19 +16,34 @@ const renderChildren = (value: unknown, parentPath: string | null = null, _key: 
   }).join('');
 };
 
-const renderLabel = (key: string, path: string) => {
+const renderCollapsed = (value: unknown, path: string) => {
   return `
-    <label class="component__node--key" for="${path}">
-      ${key} :
-    </label>
+    <div class="component__value">
+      ${Expandable.renderCollapsed(value, path)}
+    </div>
   `;
 };
 
-const renderExpanded = (value: unknown, path: string, _key: string, registry: (value: unknown) => Component) => {
+const renderExpanded = (value: unknown, path: string, _key: string, registry: (value: unknown) => Component, deletable: boolean = true) => {
   return `
-    <div class="component__node--value">
+    <div class="component__value">
       ${renderChildren(value as Record<string, unknown>, path, '', registry)}
       ${Keyable.render(path)}
+    </div>
+    ${deletable ? Deletable.renderButton(path) : ''}
+  `;
+};
+
+const renderLabel = (key: string, path: string) => {
+  return `
+    <div class="component__key">
+      ${Expandable.renderButton(path)}
+      <label
+        class="component__key--label"
+        for="${path}"
+      >
+        ${key} :
+      </label>
     </div>
   `;
 };
@@ -37,11 +52,9 @@ const render = (value: unknown, parentPath: string | null = null, key: string, r
   const path = `${parentPath ? `${parentPath}.`: ''}${key}`;
 
   return `
-    <div class="component__node">
-      ${Expandable.renderButton(path)}
+    <div class="component__container component__container--collapsable ${ Expandable.isExpanded(path) ? 'expanded' : 'collapsed' }">
       ${renderLabel(key, path)}
-      ${deletable ? Deletable.renderButton(path) : ''}
-      ${(Expandable.isExpanded(path) ? renderExpanded : Expandable.renderCollapsed)(value, path, key, registry)}
+      ${(Expandable.isExpanded(path) ? renderExpanded : renderCollapsed)(value, path, key, registry, deletable)}
     </div>
   `;
 };

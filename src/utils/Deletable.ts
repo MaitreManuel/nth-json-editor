@@ -3,7 +3,6 @@ import { remove } from '../store/store.ts';
 const handler = (event: Event) => {
   const element = event?.target as HTMLElement | undefined;
 
-  console.log(element)
   switch(true) {
     case !element || !element.dataset.path:
       break;
@@ -13,16 +12,18 @@ const handler = (event: Event) => {
   }
 };
 
-const renderButton = (path: string) => {
+const renderButton = (path: string, small = false) => {
   return `
-    <button
-      class=""
-      data-event="deletable"
-      data-path="${path}"
-      data-role="delete"
-    >
-      &#9932;
-    </button>
+    <div class="deletable__container">
+      <button
+        class="${small ? 'btn-sm' : 'btn'}"
+        data-event="deletable"
+        data-path="${path}"
+        data-role="delete"
+      >
+        &#9932; Retirer
+      </button>
+    </div>
   `;
 };
 

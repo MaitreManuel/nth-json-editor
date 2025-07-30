@@ -17,7 +17,7 @@ const renderChildren = (value: unknown, path: string , registry: (value: unknown
     const component: Component | undefined = registry(childValue);
 
     return component ? `
-        <div class="">
+        <div class="array-component__inner">
           ${component.render(childValue as unknown, path, childKey, registry)}
           ${Orderable.renderButtons(path, parseInt(childKey))}
         </div>
@@ -25,35 +25,48 @@ const renderChildren = (value: unknown, path: string , registry: (value: unknown
   }).join('');
 };
 
+const renderCollapsed = (value: unknown, path: string) => {
+  return `
+    <div class="array-component__value">
+      ${Expandable.renderCollapsed(value, path)}
+    </div>
+  `;
+};
+
 const renderExpanded = (value: unknown, path: string, registry: (value: unknown) => Component) => {
   return `
-    <div class="component__node--value">
+    <div class="array-component__value">
       ${renderChildren(value as Record<string, unknown>, path, registry)}
       ${Itemable.render(path)}
     </div>
+    ${Deletable.renderButton(path)}
   `;
 };
 
 const renderLabel = (key: string, path: string) => {
   return `
-    <label class="component__node--key" for="${path}">
-      ${key} :
-    </label>
+    <div class="component__key">
+      ${Expandable.renderButton(path)}
+      <label
+        class="component__key--label"
+        for="${path}"
+      >
+        ${key} :
+      </label>
+    </div>
   `;
 };
 
 const render = (value: unknown, parentPath: string | null = null, key: string, registry: (value: unknown) => Component) => {
   const path = `${parentPath ? `${parentPath}.`: ''}${key}`;
 
-  const renderState = Expandable.isExpanded(path) ? renderExpanded : Expandable.renderCollapsed;
+  const renderState = Expandable.isExpanded(path) ? renderExpanded : renderCollapsed;
 
   addArrayPath(`data.${path}`);
 
   return `
-    <div class="component__node">
-      ${Expandable.renderButton(path)}
+    <div class="array-component__container component__container--collapsable ${ Expandable.isExpanded(path) ? 'expanded' : 'collpased' }">
       ${renderLabel(key, path)}
-      ${Deletable.renderButton(path)}
       ${renderState(value, path, registry)}
     </div>
   `;

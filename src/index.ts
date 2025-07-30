@@ -13,9 +13,11 @@ const buildPage = () => {
 
   if ($container) {
     $container.innerHTML = `
-      <div class="component__node--value">
-        ${rootRender(data)}
-        ${Keyable.render()}
+      <div class="component__container component__container--collapsable expanded">
+        <div class="component__value ml-0">
+          ${rootRender(data)}
+          ${Keyable.render()}
+        </div>
       </div>
     `;
 

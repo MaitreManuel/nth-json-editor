@@ -24,25 +24,27 @@ const renderButtons = (path: string, index: number) => {
   const cantMoveUp = index < 1;
 
   return cantMoveDown && cantMoveUp ? '' : `
-    <button
-      class=""
-      data-event="orderable"
-      data-index="${index}"
-      data-path="${path}"
-      data-role="move-up"
-      ${cantMoveUp ? 'disabled' : '' }
-    >
-      &#129033;
-    </button><button
-      class=""
-      data-event="orderable"
-      data-index="${index}"
-      data-path="${path}"
-      data-role="move-down"
-      ${cantMoveDown ? 'disabled' : '' }
-    >
-      &#129035;
-    </button>
+    <div class="orderable__container">
+      <button
+        class="abstract-component__action"
+        data-event="orderable"
+        data-index="${index}"
+        data-path="${path}"
+        data-role="move-up"
+        ${cantMoveUp ? 'disabled' : '' }
+      >
+        &#129033;
+      </button><button
+        class="abstract-component__action"
+        data-event="orderable"
+        data-index="${index}"
+        data-path="${path}"
+        data-role="move-down"
+        ${cantMoveDown ? 'disabled' : '' }
+      >
+        &#129035;
+      </button>
+    </div>
   `;
 };
 

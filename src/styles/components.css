@@ -1,59 +1,178 @@
-.component__node {
+/******************/
+/*   Components   */
+/******************/
+.btn-sm {
+  font-size: .75rem;
+  padding: .188rem .688rem;
 }
 
-.component__node .component-view__entry {
-  display: flex;
+.btn {
+  font-size: .875rem;
+  padding: .688rem 1.438rem;
+  width: 15rem;
 }
 
-.component__node .component-view__entry .component-view__key,
-.component__node .component__node--key {
-  color: var(--color-text);
+.btn,
+.btn-sm,
+.btn-secondary,
+.btn-tertiary {
+  cursor: pointer;
+  font-family: var(--base-fonts), sans-serif;
   font-weight: bold;
-  margin-right: 5px;
 }
 
-.component__node .component-view__entry .component-view__value {
-  margin-bottom: 0;
-  margin-top: 0;
-}
-
-.component__node .component__node--value {
-  padding-left: 10px;
-}
-
-/*****************/
-/** Components ***/
-/*****************/
-.array-object__item--container {
-  display: flex;
-}
-
-.formable__container:not(.formable__container--form) {
+.component__container,
+.component__key,
+.component__key--label,
+.component__value,
+.component__value--edit,
+.expandable__container,
+.expandable__value-toggle {
   align-items: center;
+  min-height: 24px;
 }
 
-.formable__container,
-.formable__container--form,
-.formable__entry {
-  display: flex;
+.component__container.component__container--collapsable {
+  &.collapsed {
+    display: flex;
+  }
+
+  &.expanded {
+    > .component__value {
+      margin-left: 1rem;
+    }
+  }
+
+  .component__actions {
+    display: flex;
+  }
 }
 
-.formable__container--form button {
-  width: fit-content;
+.component__key {
+  .component__key--label {
+    align-content: center;
+    display: inline-block;
+    font-weight: bold;
+  }
 }
 
-.formable__container.formable__container--form {
-  flex-direction: column;
+.component__value .component__value--edit {
+  border: none;
+  cursor: pointer;
+  font-size: inherit;
 }
 
-.formable__container .formable__key label,
-.formable__container .formable__value label {
-  display: block;
+.keyable__container.keyable__container--form,
+.itemable__container.itemable__container--form {
+  padding: 1rem;
+
+  textarea {
+    font-family: inherit;
+    font-size: .875rem;
+    height: 12.5rem;
+    padding: .688rem .938rem;
+    resize: none;
+    width: calc(100% - (.938rem * 2)); /* padding-left and padding-right are .938rem each */
+  }
 }
 
-.formable__container .formable__separator {
-  background-color: gray;
-  height: 1px;
-  margin-right: 10px;
-  width: 150px;
+/******************/
+/*     Array      */
+/******************/
+
+.array-component__container {
+  &:not(.collpased) {
+    .array-component__value {
+      padding-left: 1rem;
+
+      .array-component__inner {
+      }
+    }
+  }
+
+  &.collpased {
+    display: flex;
+  }
+
+  .array-component__actions {
+    button {
+      width: 100%;
+    }
+  }
+}
+
+/******************/
+/*   Expandable   */
+/******************/
+.expandable__value-toggle {
+  margin-left: 5px;
+}
+
+.expandable__action-toggle,
+.expandable__value-toggle {
+  background-color: unset;
+  border: 0;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgb(243, 244, 249);
+  }
+}
+
+/******************/
+/*    Itemable    */
+/******************/
+
+.itemable__container {
+  .itemable__actions {
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+  }
+}
+
+/******************/
+/*    Keyable    */
+/******************/
+
+.keyable__container {
+  .keyable__actions {
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+  }
+}
+
+.keyable__container .keyable__key input,
+.keyable__container .keyable__value input {
+  font-size: .875rem;
+  padding: .688rem .938rem;
+}
+
+.keyable__container .keyable__actions,
+.keyable__container .keyable__key,
+.keyable__container .keyable__value {
+  padding-bottom: 1rem;
+  padding-top: 1rem;
+}
+
+/******************/
+/*   StringArray  */
+/******************/
+
+.string-array__container {
+  .component__actions {
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+  }
+
+  .string-array__value--edit textarea {
+    font-family: inherit;
+    font-size: inherit;
+    resize: none;
+    width: calc(100% - 3rem); /* padding-left, padding-right and margin-left are 1rem each */
+  }
+
+  .string-array__value--edit textarea,
+  .string-array__value--view {
+    padding: .5rem 1rem;
+  }
 }

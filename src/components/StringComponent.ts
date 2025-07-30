@@ -40,20 +40,26 @@ const support = (value: unknown) => typeof value === 'string';
 
 const renderLabel = (key: string, path: string) => {
   return `
-    <label class="component__node--key" for="${path}">
-      ${key} :
-    </label>
+    <div class="component__key">
+      <label
+        class="component__key--label"
+        for="${path}"
+      >
+        ${key} :
+      </label>
+    </div>
   `;
 };
 
 const renderEdit = (value: string, path: string, key: string) => {
   return `
-      <div
-        class="component__node"
-        data-path="${path}"
-        data-role="form"
-      >
-        <label for="edit-${path}">${key}</label>
+    <div
+      class="component__container"
+      data-path="${path}"
+      data-role="form"
+    >
+      ${renderLabel(key, path)}
+      <div class="component__value">
         <input
           id="edit-${path}"
           data-save="stringValue"
@@ -62,47 +68,53 @@ const renderEdit = (value: string, path: string, key: string) => {
           value="${value}"
         />
         <button
+          class="btn-sm btn-secondary mr-1"
           data-event="string"
           data-role="submit"
-          type="submit"
+          type="button"
         >
-          &#10003;
+          &#10003; Valider
         </button>
         <button
+          class="btn-sm"
           data-event="string"
           data-path="${path}"
           data-role="cancel"
           type="button"
         >
-          &#9932;
+          &#9932; Annuler
         </button>
       </div>
-    `;
+    </div>
+  `;
 };
 
 const renderView = (value: string, path: string, key: string) => {
   return `
-    <div class="component-view__entry component-view__string">
+    <div class="component__container">
       ${renderLabel(key, path)}
-      <button
-        id="view-${path}"
-        class="component__action component-view__value"
-        data-event="string"
-        data-path="${path}"
-        data-role="edit"
-        type="button"
-      >
-        ${value}
-      </button>
-      <button
-        data-event="string"
-        data-path="${path}"
-        data-role="edit"
-        type="button"
-      >
-        &#9998;
-      </button>
-      ${Deletable.renderButton(path)}
+      <div class="component__value">
+        <button
+          id="view-${path}"
+          class="component__value--edit"
+          data-event="string"
+          data-path="${path}"
+          data-role="edit"
+          type="button"
+        >
+          ${value}
+        </button>
+        <button
+          class="btn-sm mr-1"
+          data-event="string"
+          data-path="${path}"
+          data-role="edit"
+          type="button"
+        >
+          &#9998; Modifier
+        </button>
+      </div>
+      ${Deletable.renderButton(path, true)}
     </div>
   `;
 };

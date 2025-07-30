@@ -1,13 +1,92 @@
 :root {
   --base-fonts: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue";
 
-  --color-gray: #232429;
-  --color-text: var(--color-gray);
+  --color-blue: #000096;
+  --color-blue-light: #e5e5f4;
+  --color-green: #009600;
+  --color-green-light: #e5f4e5;
+  --color-grey: #c1c2c7;
+  --color-grey-light: #d3d4d9;
+  --color-grey-dark: #232429;
+  --color-white: #ffffff;
+
+  --color-main-bg: #f3f4f9;
+  --color-text: var(--color-grey-dark);
 }
 
-body {
+#nth-json-editor {
+  background-color: var(--color-main-bg);
   font-family: var(--base-fonts), sans-serif;
   font-size: .875rem;
   font-weight: 400;
   margin: 0;
 }
+
+/******************/
+/*   Components   */
+/******************/
+
+.array-component__container,
+.component__container {
+  &:hover {
+    outline: 1px dashed var(--color-blue);
+  }
+
+  &.component__container--collapsable.expanded {
+    background-color: var(--color-blue-light);
+  }
+}
+
+.component__container:not(.component__container--collapsable) {
+  display: flex;
+}
+
+.itemable__container.itemable__container--form,
+.keyable__container.keyable__container--form {
+  background-color: var(--color-green-light);
+
+  &:hover {
+    outline: 1px dashed var(--color-green);
+  }
+}
+
+.string-array__container.edit {
+  background-color: var(--color-green-light);
+  outline: 1px dashed var(--color-green);
+}
+
+.btn,
+.btn-sm{
+  color: var(--color-text);
+  background-color: var(--color-grey-light);
+  border: 1px solid var(--color-grey-light);
+
+  &:hover {
+    background-color: var(--color-grey);
+    border: 1px solid var(--color-grey);
+  }
+}
+
+.btn-secondary {
+  color: var(--color-white);
+  background-color: var(--color-green);
+  border: 1px solid var(--color-green);
+
+  &:hover {
+    color: var(--color-green);
+    background-color: var(--color-white);
+  }
+}
+
+.btn-tertiary {
+  color: var(--color-white);
+  background-color: var(--color-blue);
+  border: 1px solid var(--color-blue);
+
+  &:hover {
+    color: var(--color-blue);
+    background-color: var(--color-white);
+  }
+}
+
+

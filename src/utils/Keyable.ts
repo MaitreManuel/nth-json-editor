@@ -1,5 +1,4 @@
 import { get, set, setRawData } from '../store/store.ts';
-import type { EnhancedHTMLFormElement } from '../types';
 
 const handler = (event: Event) => {
   const element = event?.target as HTMLElement | undefined;
@@ -24,7 +23,7 @@ const handler = (event: Event) => {
       closeKeyable(element);
       break;
     case element?.dataset.role === 'submit' && event.type === 'click':
-      const formElement: EnhancedHTMLFormElement | null = element.closest('[data-role="form"]');
+      const formElement: HTMLFormElement | null = element.closest('[data-role="form"]');
 
       if (formElement) {
         save(formElement);
@@ -46,16 +45,17 @@ const save = (element: HTMLFormElement) => {
 
 const renderButton = (path: string) => {
   return `
-    <div class="formable__container">
-      <div class="formable__separator"></div>
-      <button
-        class=""
-        data-event="keyable"
-        data-path="${path}"
-        data-role="add-key"
-      >
-        &#43;
-      </button>
+    <div class="keyable__container">
+      <div class="keyable__actions">
+        <button
+          class="btn btn-tertiary"
+          data-event="keyable"
+          data-path="${path}"
+          data-role="add-key"
+        >
+          &#43; Nouvelle donnée
+        </button>
+      </div>
     </div>
   `;
 };
@@ -63,49 +63,56 @@ const renderButton = (path: string) => {
 const renderForm = (path: string) => {
   return `
     <div
-      class="formable__container formable__container--form"
+      class="keyable__container keyable__container--form"
       data-path="${path}"
       data-role="form"
     >
-      <div class="formable__entry">
-        <div class="formable__key">
-          <label for="add-key-${path}">
-            Key :
-          </label>
-          <input
-            id="add-key-${path}"
-            data-save="keyableKey"
-            name="keyableKey"
-            type="text"
-          />
-        </div>
-        <div class="formable__value">
-          <label for="add-value-${path}">
-            Value :
-          </label>
-          <input
-            id="add-value-${path}"
-            data-save="keyableValue"
-            name="keyableValue"
-            type="text"
-          />
-        </div>
+      <div class="keyable__key">
+        <label
+          class="sr-only"
+          for="add-key-${path}"
+        >
+          Nom :
+        </label>
+        <input
+          id="add-key-${path}"
+          data-save="keyableKey"
+          name="keyableKey"
+          placeholder="Nom"
+          type="text"
+        />
       </div>
-      <div class="">
+      <div class="keyable__value">
+        <label
+          class="sr-only"
+          for="add-value-${path}"
+        >
+          Valeur :
+        </label>
+        <textarea
+          id="add-value-${path}"
+          data-save="keyableValue"
+          name="keyableValue"
+          placeholder="Valeur"
+        ></textarea>
+      </div>
+      <div class="keyable__actions">
         <button
+          class="btn btn-secondary mr-1"
           data-event="keyable"
           data-role="submit"
           type="button"
         >
-          &#10003;
+          &#10003; Ajouter
         </button>
         <button
+          class="btn"
           data-event="keyable"
           data-path="${path}"
           data-role="cancel"
           type="button"
         >
-          &#9932;
+          &#9932; Annuler
         </button>
       </div>
     </div>

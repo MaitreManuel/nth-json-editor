@@ -1,7 +1,5 @@
 import { get, set, setRawData } from '../store/store.ts';
 
-import type { EnhancedHTMLFormElement } from '../types.d.ts';
-
 const handler = (event: Event) => {
   const element = event?.target as HTMLElement | undefined;
   const itemEdit = get('itemEdit') as string[] | undefined;
@@ -46,16 +44,17 @@ const save = (element: HTMLFormElement) => {
 
 const renderButton = (path: string) => {
   return `
-    <div class="formable__container">
-      <div class="formable__separator"></div>
-      <button
-        class=""
-        data-event="itemable"
-        data-path="${path}"
-        data-role="add-item"
-      >
-        &#43;
-      </button>
+    <div class="itemable__container">
+      <div class="itemable__actions">
+        <button
+          class="btn btn-tertiary"
+          data-event="itemable"
+          data-path="${path}"
+          data-role="add-item"
+        >
+          &#43; Nouvelle entrée
+        </button>
+      </div>
     </div>
   `;
 };
@@ -63,33 +62,41 @@ const renderButton = (path: string) => {
 const renderForm = (path: string) => {
   return `
     <div
-      class="formable__container formable__container--form"
+      class="itemable__container itemable__container--form"
       data-path="${path}"
       data-role="form"
     >
-      <div class="">
+      <div class="itemable__value">
+        <label
+            class="sr-only"
+            for="add-value-${path}"
+          >
+          Entrée :
+        </label>
         <textarea
+          id="add-value-${path}"
           data-save="itemableValue"
           name="itemableValue"
-          cols="50"
-          rows="10"
+          placeholder="Entrée"
         ></textarea>
       </div>
-      <div class="">
+      <div class="itemable__actions">
         <button
+          class="btn btn-secondary mr-1"
           data-event="itemable"
           data-role="submit"
           type="button"
         >
-          &#10003;
+          &#10003; Ajouter
         </button>
         <button
+          class="btn"
           data-event="itemable"
           data-path="${path}"
           data-role="cancel"
           type="button"
         >
-          &#9932;
+          &#9932; Annuler
         </button>
       </div>
     </div>

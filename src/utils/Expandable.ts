@@ -32,7 +32,7 @@ const renderButton = (path: string) => {
 
   return `
     <button
-      class=""
+      class="expandable__action-toggle"
       data-event="expandable"
       data-path="${path}"
       data-role="${expandedState ? 'collapse' : 'expand'}"
@@ -46,15 +46,17 @@ const renderButton = (path: string) => {
 
 const renderCollapsed = (_value: unknown, path: string) => {
   return `
-    <button
-      class=""
-      data-event="expandable"
-      data-path="${path}"
-      data-role="expand"
-      type="button"
-    >
-      { ... }
-    </button>
+    <div class="expandable__container">
+      <button
+        class="expandable__value-toggle"
+        data-event="expandable"
+        data-path="${path}"
+        data-role="expand"
+        type="button"
+      >
+        { ... }
+      </button>
+    </div>
   `;
 };
 
