@@ -24,7 +24,7 @@ const renderCollapsed = (value: unknown, path: string) => {
   `;
 };
 
-const renderExpanded = (value: unknown, path: string, _key: string, registry: (value: unknown) => Component, deletable: boolean = true) => {
+const renderExpanded = (value: unknown, path: string, _key: string, registry: (value: unknown) => Component, deletable: boolean) => {
   return `
     <div class="component__value">
       ${renderChildren(value as Record<string, unknown>, path, '', registry)}

@@ -44,6 +44,14 @@ const support = (value: unknown) => (
   && value.reduce((acc: boolean, current: unknown) => acc ? typeof current === 'string' : acc, true)
 );
 
+const renderCollapsed = (value: unknown, path: string) => {
+  return `
+    <div class="array-component__value">
+      ${Expandable.renderCollapsed(value, path)}
+    </div>
+  `;
+};
+
 const renderEdit = (value: string[], path: string | null = null) => {
   return `
       <div
@@ -79,14 +87,6 @@ const renderEdit = (value: string[], path: string | null = null) => {
         </div>
       </div>
     `;
-};
-
-const renderCollapsed = (value: unknown, path: string) => {
-  return `
-    <div class="array-component__value">
-      ${Expandable.renderCollapsed(value, path)}
-    </div>
-  `;
 };
 
 const renderExpanded = (value: string[], path: string) => {

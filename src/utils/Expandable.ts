@@ -26,6 +26,22 @@ const handler = (event: Event) => {
 
 const isExpanded = (path: string): boolean => (get('expanded') as string[])?.includes(path);
 
+const renderCollapsed = (_value: unknown, path: string) => {
+  return `
+    <div class="expandable__container">
+      <button
+        class="expandable__value-toggle"
+        data-event="expandable"
+        data-path="${path}"
+        data-role="expand"
+        type="button"
+      >
+        { ... }
+      </button>
+    </div>
+  `;
+};
+
 const renderButton = (path: string) => {
   const editState = get('edit') === path;
   const expandedState = isExpanded(path);
@@ -41,22 +57,6 @@ const renderButton = (path: string) => {
     >
       ${expandedState ? '&#11206;' : '&#11208;'}
     </button>
-  `;
-};
-
-const renderCollapsed = (_value: unknown, path: string) => {
-  return `
-    <div class="expandable__container">
-      <button
-        class="expandable__value-toggle"
-        data-event="expandable"
-        data-path="${path}"
-        data-role="expand"
-        type="button"
-      >
-        { ... }
-      </button>
-    </div>
   `;
 };
 
